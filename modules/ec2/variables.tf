@@ -9,6 +9,3 @@ variable "public_subnet_id" {
 variable "web_security_group_id" {
   type = string
 }
-output "database_security_group_id" {
-    type = string
-  }
