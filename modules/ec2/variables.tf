@@ -2,11 +2,10 @@
 variable "namespace" {
   type = string
 }
-# VPC
-variable "vpc" {
-  type = any
+  variable "public_subnet_id" {
+    type = string
 }
-# id du groupe de sécurité public
-variable "sg_pub_id" {
-  type = any
-}
+
+  variable "web_security_group_id" {
+    type = string
+ }
