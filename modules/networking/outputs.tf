@@ -1,11 +1,19 @@
-output "sg_pub_id" {
+output "vpc_id" {
+  value = module.vpc.vpc_id
+}
+
+output "public_subnet_ids" {
+  value = module.vpc.public_subnets
+}
+
+output "private_subnet_ids" {
+  value = module.vpc.private_subnets
+}
+
+output "database_subnet_group_name" {
+  value = module.vpc.database_subnet_group_name
+}
+
+output "web_security_group_id" {
   value = aws_security_group.HTTP.id
-}
-output "public_subnet_id" {
-  value       = vpc.public._subnet_public[*].id
-  description = "The ID of the subnet."
-}
-output "public_subnet_cidrs" {
-  value       = aws_subnet.public[*].cidr_block
-  description = "CIDR blocks of the created public subnets."
 }
