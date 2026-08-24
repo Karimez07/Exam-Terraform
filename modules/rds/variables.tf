@@ -17,3 +17,7 @@ variable "database_subnet_group_name" {
 variable "database_security_group_id" {
   type = string
 }
+
+variable "db_name" {
+  type      = string
+}

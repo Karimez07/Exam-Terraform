@@ -1,6 +1,6 @@
 resource "aws_db_instance" "default" {
   allocated_storage      = 20
-  db_name                = "db_terraform"
+  db_name                = var.db_name
   engine                 = "mysql"
   engine_version         = "8.0"
   instance_class         = "db.t3.micro"
