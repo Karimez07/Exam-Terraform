@@ -14,8 +14,5 @@ resource "aws_volume_attachment" "liaison" {
   device_name = "/dev/sdf"
   volume_id   = aws_ebs_volume.wordpress_data.id
   instance_id = var.instance_id
-
-  tags = {
-    Name = "${var.namespace}-volume-attachment"
-  }
+  
 }

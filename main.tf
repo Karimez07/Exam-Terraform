@@ -31,3 +31,10 @@ module "rds" {
   database_subnet_group_name = module.networking.database_subnet_group_name
   database_security_group_id = module.networking.database_security_group_id
 }
+
+module "ebs" {
+  source    = "./modules/ebs"
+  namespace = var.namespace
+  instance_id = module.ec2.instance_id
+  availability_zone = module.ec2.availability_zone
+}
