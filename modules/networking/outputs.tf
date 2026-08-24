@@ -17,3 +17,7 @@ output "database_subnet_group_name" {
 output "web_security_group_id" {
   value = aws_security_group.HTTP.id
 }
+
+output "database_security_group_id" {
+  value = aws_security_group.database.id
+}

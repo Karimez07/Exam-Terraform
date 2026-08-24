@@ -29,3 +29,21 @@ resource "aws_security_group" "HTTP" {
     Name = "${var.namespace}-HTTP"
   }
 }
+
+resource "aws_security_group" "database" {
+  name        = "${var.namespace}-database"
+  description = "Autoriser MySQL depuis le serveur web"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    description     = "MySQL depuis EC2"
+    from_port       = 3306
+    to_port         = 3306
+    protocol        = TCP
+    security_groups = [aws_security_groupe.HTTP.id]
+  }
+
+  tags = {
+    Name = "${var.namespace}-database"
+  }
+}
