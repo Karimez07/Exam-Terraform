@@ -30,7 +30,7 @@ dnf update -y
   EBS_DEVICE=""
 
   for attempt in $(seq 1 60); do
-    for candidate inveri /dev/sdf /dev/xvdf; do
+    for candidate in /dev/sdf /dev/xvdf; do
       if [ -b "$candidate" ]; then
         EBS_DEVICE="$candidate"
         break 2
