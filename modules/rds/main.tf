@@ -10,7 +10,6 @@ resource "aws_db_instance" "default" {
   db_subnet_group_name   = var.database_subnet_group_name
   vpc_security_group_ids = [var.database_security_group_id]
   skip_final_snapshot    = true
-  storage_encrypted      = true
   publicly_accessible    = false
   multi_az               = true
 }

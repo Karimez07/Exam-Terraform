@@ -42,3 +42,8 @@ module "ebs" {
   instance_id       = module.ec2.instance_id
   availability_zone = module.ec2.availability_zone
 }
+
+output "wordpress_url" {
+  description = "URL publique du site WordPress"
+  value       = "http://${module.ec2.public_ip}"
+}
