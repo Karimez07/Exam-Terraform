@@ -19,5 +19,5 @@ variable "database_security_group_id" {
 }
 
 variable "db_name" {
-  type      = string
+  type = string
 }
