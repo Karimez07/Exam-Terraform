@@ -14,37 +14,23 @@ WORDPRESS_DIR="/var/www/html" # wordpress code directory
 
 
 # Update the system
-yum update -y
-
-# Enable the PHP 8.2 repository provided by Amazon Linux Extras.
-# By default, Amazon Linux 2 may install an older PHP version.
-# Refresh the YUM metadata so the package manager can see the newly enabled repository.
-PHP_REPO=$(amazon-linux-extras list | awk '/php8/ {print $1}' | tail -1)
-amazon-linux-extras enable "$PHP_REPO"
-yum clean metadata
-
+dnf update -y
 
 # Install Apache HTTP server, required PHP modules and MariaDB
-yum install -y \
-httpd \
-wget \
-php \
-php-bcmath \
-php-curl \
-php-fpm \
-php-gd \
-php-intl \
-php-mbstring \
-php-mysqlnd \
-php-xml \
-php-zip
-
+ dnf install -y \
+    httpd \
+    wget \
+    php \
+    php-fpm \
+    php-mysqlnd \
+    php-mysqli \
+    php-json
 
  # Wait until Terraform attaches the EBS volume
   EBS_DEVICE=""
 
   for attempt in $(seq 1 60); do
-    for candidate in /dev/sdf /dev/xvdf; do
+    for candidate inveri /dev/sdf /dev/xvdf; do
       if [ -b "$candidate" ]; then
         EBS_DEVICE="$candidate"
         break 2
