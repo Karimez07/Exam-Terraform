@@ -1,8 +1,8 @@
 output "sg_pub_id" {
-  value = aws_security_group.allow_internet.id
+  value = aws_security_group.HTTP.id
 }
 output "public_subnet_id" {
-  value       = aws_subnet.public[*].id
+  value       = vpc.public._subnet_public[*].id
   description = "The ID of the subnet."
 }
 output "public_subnet_cidrs" {
