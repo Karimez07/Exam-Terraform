@@ -39,8 +39,8 @@ resource "aws_security_group" "database" {
     description     = "MySQL depuis EC2"
     from_port       = 3306
     to_port         = 3306
-    protocol        = TCP
-    security_groups = [aws_security_groupe.HTTP.id]
+    protocol        = "tcp"
+    security_groups = [aws_security_group.HTTP.id]
   }
 
   tags = {
