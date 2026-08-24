@@ -16,11 +16,6 @@ WORDPRESS_DIR="/var/www/html" # wordpress code directory
 # Update the system
 yum update -y
 
-
-# Install expect package
-yum install expect -y
-
-
 # Enable the PHP 8.2 repository provided by Amazon Linux Extras.
 # By default, Amazon Linux 2 may install an older PHP version.
 # Refresh the YUM metadata so the package manager can see the newly enabled repository.
@@ -42,9 +37,42 @@ php-intl \
 php-mbstring \
 php-mysqlnd \
 php-xml \
-php-zip \
-mariadb-server
+php-zip
 
+
+ # Wait until Terraform attaches the EBS volume
+  EBS_DEVICE=""
+
+  for attempt in $(seq 1 60); do
+    for candidate in /dev/sdf /dev/xvdf; do
+      if [ -b "$candidate" ]; then
+        EBS_DEVICE="$candidate"
+        break 2
+      fi
+    done
+
+    sleep 5
+  done
+
+  if [ -z "$EBS_DEVICE" ]; then
+    echo "Le volume EBS n'a pas été détecté."
+    exit 1
+  fi
+
+  # Create a filesystem only when the volume is still empty
+  if ! blkid "$EBS_DEVICE" >/dev/null 2>&1; then
+    mkfs.ext4 "$EBS_DEVICE"
+  fi
+
+  mkdir -p "$WORDPRESS_DIR"
+
+  EBS_UUID=$(blkid -s UUID -o value "$EBS_DEVICE")
+
+  if ! grep -q "UUID=$EBS_UUID " /etc/fstab; then
+    echo "UUID=$EBS_UUID $WORDPRESS_DIR ext4 defaults,nofail 0 2" >> /etc/fstab
+  fi
+
+  mountpoint -q "$WORDPRESS_DIR" || mount "$WORDPRESS_DIR"
 
 # Start and enable Apache to start on boot
 systemctl enable --now httpd
@@ -53,8 +81,6 @@ systemctl enable --now httpd
 # Add user to apache group
 usermod -aG apache ec2-user
 
-
-# Create a PHP info page
 chown -R ec2-user:apache /var/www/html/
 chmod 2775 /var/www
 find /var/www -type d -exec chmod 2775 {} \;
@@ -62,6 +88,7 @@ find /var/www -type f -exec chmod 0664 {} \;
 
 # Change to the user's home directory
 cd /home/ec2-user
+
 
 
 # Download the latest WordPress
