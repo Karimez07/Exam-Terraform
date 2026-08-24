@@ -7,7 +7,7 @@ exec 2>&1
 
 DB_NAME="wordpress_db"
 DB_USER="liora-student"
-DB_PASSWORD="Liora@2026"
+DB_PASSWORD="$PWD_DB_WORDPRESS"
 
 WORDPRESS_DIR="/var/www/html" # wordpress code directory
 
