@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euxo pipefail
+set -euo pipefail
 
 
 exec > >(tee /var/log/install-wordpress.log)
@@ -59,39 +59,6 @@ chown -R ec2-user:apache /var/www/html/
 chmod 2775 /var/www
 find /var/www -type d -exec chmod 2775 {} \;
 find /var/www -type f -exec chmod 0664 {} \;
-echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php
-
-
-# Start and enable MariaDB to start on boot
-systemctl enable --now mariadb
-
-
-# Secure the MariaDB installation
-echo "Securing MariaDB installation..."
-expect - <<EOF
-spawn mysql_secure_installation
-expect "Enter current password for root (enter for none):"
-send "\r"
-expect "Switch to unix_socket authentication:"
-send "n\r"
-expect "Change the root password?"
-send "y\r"
-expect "New password:"
-send "$DB_PASSWORD\r"
-expect "Re-enter new password:"
-send "$DB_PASSWORD\r"
-expect "Remove anonymous users?"
-send "y\r"
-expect "Disallow root login remotely?"
-send "y\r"
-expect "Remove test database and access to it?"
-send "y\r"
-expect "Reload privilege tables now?"
-send "y\r"
-expect eof
-EOF
-echo "MariaDB installation secured."
-
 
 # Change to the user's home directory
 cd /home/ec2-user
@@ -113,23 +80,6 @@ rm -r wordpress/
 
 # Change ownership of the web directory
 chown -R ec2-user:apache $WORDPRESS_DIR
-
-
-# Create the WordPress database
-mysql -u root -e "CREATE DATABASE $DB_NAME;"
-
-
-# Create a user for the database
-mysql -u root -e "CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASSWORD';"
-
-
-# Grant privileges to the user
-mysql -u root -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_USER'@'localhost';"
-
-
-# Flush privileges
-mysql -u root -e "FLUSH PRIVILEGES;"
-
 
 # Change to the WordPress directory
 cd $WORDPRESS_DIR
@@ -153,7 +103,7 @@ sed -i "s/password_here/$DB_PASSWORD/" wp-config.php
 
 # Replace database host in the configuration file
 # Ligne qui ne sert à rien ici, mais à garder si on veut avoir une db sur un autre hôte
-sed -i "s/localhost/localhost/" wp-config.php
+sed -i "s/localhost/$DB_HOST/" wp-config.php
 
 
 
