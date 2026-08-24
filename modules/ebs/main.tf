@@ -1,8 +1,19 @@
-resource "aws_ebs_volume" "persistance_db" {
-  availability_zone = "eu-west-3a"
+resource "aws_ebs_volume" "wordpress_data" {
+  availability_zone = var.availability_zone
   size              = 10
 
   tags = {
-    Name = "persistance_db"
+    Name = "${var.namespace}-wordpress_data"
+  }
+
+resource "aws_volume_attachment" "liaison" {
+  device_name = "/dev/sdf"
+  volume_id = module.aws_ebs_volume.ebs_volume
+  instance_id = var.instance_id
+  type = "gp3"
+  encrypted = true
+
+  tags = {
+    Name = "${var.namespace}-volume-attachment"
   }
 }

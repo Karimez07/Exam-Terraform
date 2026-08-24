@@ -1,3 +1,3 @@
 output "ebs_volume" {
-  value = aws_ebs_volume.persistance_db.id
+  value = aws_ebs_volume.wordpress_data.id
 }
