@@ -16,7 +16,7 @@ module "vpc" {
 
 # SG pour autoriser les connexions SSH depuis n'importe quel hôte
 resource "aws_security_group" "HTTP" {
-  name        = "${var.namespace}-allow_ssh"
+  name        = "${var.namespace}-allow_internet"
   description = "Autoriser le trafic HTTP"
   vpc_id      = module.vpc.vpc_id
 
