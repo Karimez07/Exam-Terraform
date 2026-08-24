@@ -20,6 +20,10 @@ module "ec2" {
   namespace             = var.namespace
   public_subnet_id      = module.networking.public_subnet_ids[0]
   web_security_group_id = module.networking.web_security_group_id
+  db_host     = module.rds.database_address
+  db_name     = var.db_name
+  db_username = var.db_username
+  db_password = var.db_password
 }
 
 module "rds" {

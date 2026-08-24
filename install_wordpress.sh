@@ -5,9 +5,10 @@ set -euxo pipefail
 exec > >(tee /var/log/install-wordpress.log)
 exec 2>&1
 
-DB_NAME="wordpress_db"
-DB_USER="liora-student"
-DB_PASSWORD="$PWD_DB_WORDPRESS"
+DB_HOST="${db_host}"
+DB_NAME="${db_name}"
+DB_USER="${db_username}"
+DB_PASSWORD="${db_password}"
 
 WORDPRESS_DIR="/var/www/html" # wordpress code directory
 
